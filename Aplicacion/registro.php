@@ -27,6 +27,8 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
 </head>
 
 <body>
@@ -165,12 +167,30 @@
                                         $insert->bindParam(':password',$cifrado,PDO::PARAM_STR);
                                         $insert->bindParam(':nivel',$nivel,PDO::PARAM_STR);
                                         $insert->execute();
-
-                                        echo '<script language="javascript">alert("El usuario se ha registrado correctamente");</script>';
+                                        
+                                        // Utilizar SweetAlert para mostrar un mensaje 
+                                        echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>';
+                                        echo '<script language="javascript">';
+                                        echo 'Swal.fire({';
+                                        echo '    icon: "success",';
+                                        echo '    title: "Registro Exitoso",';
+                                        echo '    text: "El usuario se ha registrado correctamente",';
+                                        echo '}).then(function() {';
+                                        echo '    window.location.href = "../inicio de sesion.php";';
+                                        echo '});';
+                                        echo '</script>';
+                                        //echo '<script language="javascript">alert("El usuario se ha registrado correctamente");</script>';
                                         
                                     }
                                     else if ($query -> rowCount() > 0){
-                                        echo '<script language="javascript">alert("El usuario ya existe");</script>';
+                                        echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>';
+                                        echo '<script language="javascript">';
+                                        echo 'Swal.fire({';
+                                        echo '    icon: "error",';
+                                        echo '    title: "Error",';
+                                        echo '    text: "El usuario ya existe",';
+                                        echo '});';
+                                        echo '</script>';
                                     }
                                     $query->closeCursor();
                                     $query = null;

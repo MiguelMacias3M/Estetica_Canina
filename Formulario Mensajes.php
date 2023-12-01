@@ -27,6 +27,9 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
 </head>
 
 <body>
@@ -99,9 +102,9 @@
                             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
                                 <fieldset>
                                     <!-- folio -->
-                                    <label for="">Numero de registro</label>
-                                    <input type="numero" class="form-control" name="numero" disabled value="<?php
-                                        echo $numero; ?>" />
+                                    <label hidden for="">Numero de registro</label>
+                                    <input  hidden type="numero" class="form-control" name="numero" disabled value="<?php
+                                     echo $numero; ?>" />
                                     <br>
                                     <!-- nombre -->
                                     <input type="text" class="form-control" name="usuario" placeholder="Tu nombre" required="required" data-validation-required-message="Por favor ingrese su nombre" />
@@ -158,10 +161,38 @@
                                         $insert->bindParam(':correo',$correo,PDO::PARAM_STR);
                                         $insert->bindParam(':mensaje',$mensaje,PDO::PARAM_STR);
                                         $insert->execute();
-                                        echo "Tus datos se agregaron satisfactoriamente!!!";
+                                        echo <<< EOD
+                                            <script>
+                                                // Utiliza SweetAlert para mostrar un mensaje de éxito
+                                                Swal.fire({
+                                                    title: 'Éxito',
+                                                    text: 'El mensaje se ha realizado correctamente.',
+                                                    icon: 'success',
+                                                    confirmButtonText: 'OK'
+                                                });
+                                            </script>
+                                            EOD;
                                     }
                                     else if ($query -> rowCount() > 0){
-                                        echo "<br> Ya existe un usuario con ese nombre.";
+                                        $usuario=$_POST['usuario'];
+                                        $genero=$_POST["genero"];
+                                        $correo=$_POST["correo"];
+                                        $mensaje=$_POST["mensaje"];
+                    
+                                        $insert = 'insert into mensajes(usuario,genero,correo,mensaje) values(:usuario,:genero,:correo,:mensaje)';
+                                        $insert = $con->prepare($insert);
+                                        $insert->bindParam(':usuario',$usuario,PDO::PARAM_STR);
+                                        $insert->bindParam(':genero',$genero,PDO::PARAM_STR);
+                                        $insert->bindParam(':correo',$correo,PDO::PARAM_STR);
+                                        $insert->bindParam(':mensaje',$mensaje,PDO::PARAM_STR);
+                                        $insert->execute();
+                                        echo '<script>
+                                            Swal.fire({
+                                                icon: "success",
+                                                title: "Éxito",
+                                                text: "El mensaje se ha realizado correctamente.",
+                                            });
+                                        </script>';
                                     }
                                     $query->closeCursor();
                                     $query = null;
